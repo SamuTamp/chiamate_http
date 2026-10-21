@@ -32,3 +32,7 @@ La risposta della POST contiene `id: 101`. JSONPlaceholder simula la creazione, 
 9. I file `environment.ts` e `environment.development.ts` sono esclusi dal repository tramite `.gitignore`. `environment.example.ts` contiene la struttura senza la chiave reale e serve come modello da copiare quando si clona il progetto.
 
 10. La chiave inclusa nel codice Angular viene scaricata nel browser e può essere letta dagli utenti: non è segreta. Una chiave importante va conservata sul server e usata da un backend.
+
+## Prova tu - livello 1
+
+La pagina Post carica 10 elementi per pagina con i parametri `_page` e `_limit`. La richiesta per la pagina 2 è stata verificata: stato 200, 10 elementi, ID dal 11 al 20. I pulsanti Precedente e Successiva sono disabilitati rispettivamente alla pagina 1 e alla pagina 10.

@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Post } from '../modelli/post';
 import { PostService } from '../services/post-service';
 
@@ -10,13 +10,18 @@ import { PostService } from '../services/post-service';
   templateUrl: './posts.html',
   styleUrl: './posts.css',
 })
-export class Posts {
+export class Posts implements OnInit {
   private readonly postService = inject(PostService);
 
   readonly post = signal<Post | null>(null);
   readonly posts = signal<Post[]>([]);
+  readonly pagina = signal(1);
   readonly loading = signal(false);
   readonly errore = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.caricaPagina(1);
+  }
 
   caricaUno(numero: string): void {
     this.inizia();
@@ -32,6 +37,18 @@ export class Posts {
   caricaTutti(): void {
     this.inizia();
     this.postService.getPosts().subscribe({
+      next: (dati) => {
+        this.posts.set(dati);
+        this.loading.set(false);
+      },
+      error: (err: HttpErrorResponse) => this.gestisciErrore(err),
+    });
+  }
+
+  caricaPagina(pagina: number): void {
+    this.pagina.set(pagina);
+    this.inizia();
+    this.postService.getPagina(pagina).subscribe({
       next: (dati) => {
         this.posts.set(dati);
         this.loading.set(false);
